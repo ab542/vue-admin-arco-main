@@ -35,3 +35,6 @@ export interface GeneralChart {
   xAxis: string[]
   data: Array<{ name: string; value: number[] }>
 }
+
+// shims-globals.d.ts
+export type BASE_URL = string

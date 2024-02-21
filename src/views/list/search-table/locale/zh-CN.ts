@@ -2,10 +2,7 @@ export default {
   'menu.list.searchTable': '查询表格',
   'menu.examine.product': '产品审核',
   'menu.examine.institution': '养老机构审核',
-  'searchTable.form.number': '集合编号',
   'searchTable.form.number.placeholder': '请输入集合编号',
-  'searchTable.form.name': '集合名称',
-  'searchTable.form.name.placeholder': '请输入集合名称',
   'searchTable.form.contentType': '内容体裁',
   'searchTable.form.contentType.img': '图文',
   'searchTable.form.contentType.horizontalVideo': '横版短视频',
@@ -23,14 +20,24 @@ export default {
   'searchTable.operation.create': '新建',
   'searchTable.operation.import': '批量导入',
   'searchTable.operation.download': '下载',
+
+  // FORM
+  'searchTable.form.number': '集合编号',
+  'searchTable.form.name': '集合名称',
+  'searchTable.form.description': '集合描述',
+  'searchTable.form.description.placeholder': '请输入集合描述',
   // columns
   'searchTable.columns.number': '集合编号',
   'searchTable.columns.name': '集合名称',
+  'searchTable.columns.description': '集合描述',
+
   'searchTable.columns.contentType': '内容体裁',
   'searchTable.columns.filterType': '筛选方式',
   'searchTable.columns.count': '内容量',
   'searchTable.columns.createdTime': '创建时间',
   'searchTable.columns.status': '状态',
   'searchTable.columns.operations': '操作',
+  'searchTable.columns.edit': '编辑',
+  'searchTable.columns.delete': '删除',
   'searchTable.columns.operations.view': '查看',
 }

@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <Breadcrumb :items="['menu.order.list', 'menu.list.searchTable']" />
+
     <a-card class="general-card" :title="$t('menu.list.searchTable')">
       <a-row>
         <a-col :flex="1">
@@ -267,3 +268,4 @@ export default defineComponent({
   }
 }
 </style>
+@/api/list

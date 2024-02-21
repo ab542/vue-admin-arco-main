@@ -7,48 +7,29 @@
           <a-form :model="formModel" :label-col-props="{ span: 6 }" :wrapper-col-props="{ span: 18 }" label-align="left">
             <a-row :gutter="16">
               <a-col :span="8">
-                <a-form-item field="number" :label="$t('order-list的哈')">
-                  <!-- <a-form-item field="number" :label="$t('searchTable.form.number')"> -->
-                  <a-input v-model="formModel.number" :placeholder="$t('searchTable.form.number.placeholder')" />
+                <a-form-item field="roleId" :label="$t('searchTable.columns.name')">
+                  <a-input v-model="formModel.roleId" :placeholder="$t('searchTable.form.number.placeholder')" />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
                 <a-form-item field="name" :label="$t('searchTable.form.name')">
-                  <a-input v-model="formModel.name" :placeholder="$t('searchTable.form.name.placeholder')" />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item field="contentType" :label="$t('searchTable.form.contentType')">
                   <a-select
-                    v-model="formModel.contentType"
+                    v-model="formModel.description"
                     :options="contentTypeOptions"
                     :placeholder="$t('searchTable.form.selectDefault')"
                   />
                 </a-form-item>
               </a-col>
               <a-col :span="8">
-                <a-form-item field="filterType" :label="$t('searchTable.form.filterType')">
-                  <a-select
-                    v-model="formModel.filterType"
-                    :options="filterTypeOptions"
-                    :placeholder="$t('searchTable.form.selectDefault')"
-                  />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item field="createdTime" :label="$t('searchTable.form.createdTime')">
-                  <a-range-picker v-model="formModel.createdTime" style="width: 100%" />
-                </a-form-item>
-              </a-col>
-              <a-col :span="8">
-                <a-form-item field="status" :label="$t('searchTable.form.status')">
-                  <a-select v-model="formModel.status" :options="statusOptions" :placeholder="$t('searchTable.form.selectDefault')" />
+                <a-form-item field="description" :label="$t('searchTable.form.description')">
+                  <a-input v-model="formModel.name" :placeholder="$t('searchTable.form.description.placeholder')" />
                 </a-form-item>
               </a-col>
             </a-row>
           </a-form>
         </a-col>
         <a-divider style="height: 84px" direction="vertical" />
+        <!-- 按钮：搜索+重置 -->
         <a-col :flex="'86px'" style="text-align: right">
           <a-space direction="vertical" :size="18">
             <a-button type="primary" @click="search">
@@ -67,15 +48,17 @@
         </a-col>
       </a-row>
       <a-divider style="margin-top: 0" />
+      <!-- 按钮：新建 批量导入 -->
       <a-row style="margin-bottom: 16px">
         <a-col :span="16">
           <a-space>
-            <a-button type="primary">
+            <a-button type="primary" @click="showCreateDialog">
               <template #icon>
                 <icon-plus />
               </template>
               {{ $t('searchTable.operation.create') }}
             </a-button>
+            <!-- <el-button @click="handleClose">取 消</el-button> -->
             <a-upload action="/">
               <template #upload-button>
                 <a-button>
@@ -96,51 +79,16 @@
       </a-row>
       <a-table row-key="id" :loading="loading" :pagination="pagination" :data="renderData" :bordered="false" @page-change="onPageChange">
         <template #columns>
-          <a-table-column :title="$t('searchTable.columns.number')" data-index="number" />
+          <a-table-column :title="$t('searchTable.columns.number')" data-index="roleId" />
           <a-table-column :title="$t('searchTable.columns.name')" data-index="name" />
-          <a-table-column :title="$t('searchTable.columns.contentType')" data-index="contentType">
-            <template #cell="{ record }">
-              <a-space>
-                <a-avatar v-if="record.contentType === 'img'" :size="16" shape="square">
-                  <img
-                    alt="avatar"
-                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/581b17753093199839f2e327e726b157.svg~tplv-49unhts6dw-image.image"
-                  />
-                </a-avatar>
-                <a-avatar v-else-if="record.contentType === 'horizontalVideo'" :size="16" shape="square">
-                  <img
-                    alt="avatar"
-                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/77721e365eb2ab786c889682cbc721c1.svg~tplv-49unhts6dw-image.image"
-                  />
-                </a-avatar>
-                <a-avatar v-else :size="16" shape="square">
-                  <img
-                    alt="avatar"
-                    src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/ea8b09190046da0ea7e070d83c5d1731.svg~tplv-49unhts6dw-image.image"
-                  />
-                </a-avatar>
-                {{ $t(`searchTable.form.contentType.${record.contentType}`) }}
-              </a-space>
-            </template>
-          </a-table-column>
-          <a-table-column :title="$t('searchTable.columns.filterType')" data-index="filterType">
-            <template #cell="{ record }">
-              {{ $t(`searchTable.form.filterType.${record.filterType}`) }}
-            </template>
-          </a-table-column>
-          <a-table-column :title="$t('searchTable.columns.count')" data-index="count" />
-          <a-table-column :title="$t('searchTable.columns.createdTime')" data-index="createdTime" />
-          <a-table-column :title="$t('searchTable.columns.status')" data-index="status">
-            <template #cell="{ record }">
-              <span v-if="record.status === 'offline'" class="circle"></span>
-              <span v-else class="circle pass"></span>
-              {{ $t(`searchTable.form.status.${record.status}`) }}
-            </template>
-          </a-table-column>
+          <a-table-column :title="$t('searchTable.columns.description')" data-index="description" />
           <a-table-column :title="$t('searchTable.columns.operations')" data-index="operations">
             <template #cell>
               <a-button v-permission="['admin']" type="text" size="small">
-                {{ $t('searchTable.columns.operations.view') }}
+                {{ $t('searchTable.columns.edit') }}
+              </a-button>
+              <a-button v-permission="['admin']" type="text" size="small">
+                {{ $t('searchTable.columns.delete') }}
               </a-button>
             </template>
           </a-table-column>
@@ -148,23 +96,41 @@
       </a-table>
     </a-card>
   </div>
+
+  <!-- 弹窗 -->
+  <el-dialog v-model="dialogVisible" title="新建" width="30%" :before-close="handleClose">
+    <!-- 在这里放置弹窗内容 -->
+    <el-form :model="formData" label-width="80px">
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="formData.name"></el-input>
+      </el-form-item>
+      <el-form-item label="年龄" prop="age">
+        <el-input v-model="formData.age" type="number"></el-input>
+      </el-form-item>
+    </el-form>
+
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="handleClose">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit">确 定</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts">
-import { PolicyParams, PolicyRecord, queryPolicyList } from '@/api/list'
+import { PolicyParams, PolicyRecord, queryPolicyList } from '@/api/list_role'
 import useLoading from '@/hooks/loading'
 import { Options, Pagination } from '@/types/global'
+import { ElButton, ElDialog, ElForm, ElFormItem, ElInput } from 'element-plus'
 import { computed, defineComponent, reactive, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const generateFormModel = () => {
   return {
-    number: '',
+    roleId: '',
     name: '',
-    contentType: '',
-    filterType: '',
-    createdTime: [],
-    status: '',
+    description: '',
   }
 }
 export default defineComponent({
@@ -173,6 +139,7 @@ export default defineComponent({
     const { t } = useI18n()
     const renderData = ref<PolicyRecord[]>([])
     const formModel = ref(generateFormModel())
+
     const basePagination: Pagination = {
       current: 1,
       pageSize: 20,
@@ -180,17 +147,22 @@ export default defineComponent({
     const pagination = reactive({
       ...basePagination,
     })
+
     const contentTypeOptions: any = computed<Options[]>(() => [
       {
-        label: t('searchTable.form.contentType.img'),
+        label: t('超级管理员'),
         value: 'img',
       },
       {
-        label: t('searchTable.form.contentType.horizontalVideo'),
+        label: t('普通用户'),
         value: 'horizontalVideo',
       },
       {
-        label: t('searchTable.form.contentType.verticalVideo'),
+        label: t('服务人员'),
+        value: 'verticalVideo',
+      },
+      {
+        label: t('服务供应商'),
         value: 'verticalVideo',
       },
     ])
@@ -214,15 +186,20 @@ export default defineComponent({
         value: 'offline',
       },
     ])
-    const fetchData = async (params: PolicyParams = { current: 1, pageSize: 20 }) => {
+
+    const fetchData = async (params: PolicyParams = { pageCurrent: 1, pageSize: 20 }) => {
       setLoading(true)
       try {
-        const { data } = await queryPolicyList(params)
+        console.log('data:', queryPolicyList(params))
+        const data = await queryPolicyList(params)
+        // @ts-ignore
         renderData.value = data.list
-        pagination.current = params.current
+        pagination.current = params.pageCurrent
+        // @ts-ignore
         pagination.total = data.total
       } catch (err) {
         // you can report use errorHandler or other
+        console.log('An error occurred while fetching data：', err)
       } finally {
         setLoading(false)
       }
@@ -234,14 +211,35 @@ export default defineComponent({
         ...formModel.value,
       } as unknown as PolicyParams)
     }
-    const onPageChange = (current: number) => {
-      fetchData({ ...basePagination, current })
+    const onPageChange = (pageCurrent: number) => {
+      fetchData({ ...basePagination, pageCurrent })
     }
 
     fetchData()
     const reset = () => {
       formModel.value = generateFormModel()
     }
+
+    const dialogVisible = ref(false)
+    const formData = ref({
+      name: '',
+      age: '',
+    })
+
+    const showCreateDialog = () => {
+      console.log('点击了新建')
+      dialogVisible.value = true
+    }
+
+    const handleClose = () => {
+      dialogVisible.value = false
+    }
+
+    const handleSubmit = () => {
+      console.log('Form submitted:', formModel.value)
+      dialogVisible.value = false
+    }
+
     return {
       loading,
       search,
@@ -253,8 +251,37 @@ export default defineComponent({
       contentTypeOptions,
       filterTypeOptions,
       statusOptions,
+      dialogVisible,
+      formData,
+      showCreateDialog,
+      handleClose,
+      handleSubmit,
     }
   },
+  // data() {
+  //   return {
+  //     dialogVisible: false, // 弹窗是否可见
+  //     formData: { name: '', age: '' }, // 表单数据
+  //   }
+  // },
+  // methods: {
+  //   showCreateDialog() {
+  //     // 在这个方法中处理弹出新建弹框的逻辑
+  //     // 可以使用弹框组件，如Modal，来实现
+  //     // 例如：this.$Modal.confirm({...});
+  //     console.log('新建弹窗出现')
+  //     this.dialogVisible = true
+  //   }, // 关闭弹窗
+  //   handleClose() {
+  //     this.dialogVisible = false
+  //   }, // 提交表单
+  //   handleSubmit() {
+  //     // 在这里处理表单提交逻辑，比如发送请求保存数据等
+  //     console.log('Form submitted:', this.formData)
+  //     // 提交成功后关闭弹窗
+  //     this.dialogVisible = false
+  //   },
+  // },
 })
 </script>
 
@@ -267,3 +294,4 @@ export default defineComponent({
   }
 }
 </style>
+@/api/list_role

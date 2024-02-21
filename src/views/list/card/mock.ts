@@ -1,6 +1,6 @@
-import Mock from 'mockjs'
+import { ServiceRecord } from '@/api/list_role'
 import setupMock, { successResponseWrap } from '@/utils/setup-mock'
-import { ServiceRecord } from '@/api/list'
+import Mock from 'mockjs'
 
 const qualityInspectionList: ServiceRecord[] = [
   {

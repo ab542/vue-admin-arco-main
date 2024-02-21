@@ -32,9 +32,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import { queryTheServiceList, ServiceRecord } from '@/api/list'
+import { queryTheServiceList, ServiceRecord } from '@/api/list_role'
 import useRequest from '@/hooks/request'
+import { defineComponent } from 'vue'
 import CardWrap from './card-wrap.vue'
 
 export default defineComponent({
@@ -53,3 +53,4 @@ export default defineComponent({
 </script>
 
 <style scoped lang="less"></style>
+@/api/list_role

@@ -1,12 +1,13 @@
-import { App } from 'vue'
+import { BarChart, LineChart, PieChart, RadarChart } from 'echarts/charts'
+import { DataZoomComponent, GraphicComponent, GridComponent, LegendComponent, TooltipComponent } from 'echarts/components'
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
-import { BarChart, LineChart, PieChart, RadarChart } from 'echarts/charts'
-import { GridComponent, TooltipComponent, LegendComponent, DataZoomComponent, GraphicComponent } from 'echarts/components'
-import Chart from './chart/index.vue'
+import ElementPlus from 'element-plus'
+import 'element-ui/lib/theme-chalk/index.css'
+import { App } from 'vue'
 import Breadcrumb from './breadcrumb/index.vue'
+import Chart from './chart/index.vue'
 // import SvgIcon from './svg-icon/index.vue';
-
 // Manually introduce ECharts modules to reduce packing size
 
 use([
@@ -26,6 +27,8 @@ export default {
   install(Vue: App) {
     Vue.component('Chart', Chart)
     Vue.component('Breadcrumb', Breadcrumb)
-    // Vue.component('SvgIcon', SvgIcon);
+    // 在 Vue 实例中使用 Element UI
+    // 使用 app.use() 方法注册 Element Plus 组件
+    Vue.component('ElementPlus', ElementPlus)
   },
 }

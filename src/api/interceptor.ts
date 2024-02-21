@@ -1,6 +1,6 @@
-import axios from 'axios'
-import { Message, Modal } from '@arco-design/web-vue'
 import { useUserStore } from '@/store'
+import { Message, Modal } from '@arco-design/web-vue'
+import axios from 'axios'
 
 export interface HttpResponse<T = unknown> {
   status: number
@@ -22,6 +22,7 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response: any) => {
     const res = response.data
+    console.log('拦截处的response.data', res)
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 20000) {
       Message.error({

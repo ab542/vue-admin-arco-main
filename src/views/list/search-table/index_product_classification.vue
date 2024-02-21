@@ -267,3 +267,4 @@ export default defineComponent({
   }
 }
 </style>
+@/api/list
