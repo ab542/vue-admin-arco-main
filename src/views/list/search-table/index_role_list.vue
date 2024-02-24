@@ -95,31 +95,35 @@
         </template>
       </a-table>
     </a-card>
+    <!-- 弹窗 -->
+    <el-dialog
+      v-model="dialogVisible"
+      class="el-dialog"
+      title="创建角色"
+      width="30%"
+      :before-close="handleClose"
+      :append-to-body="true"
+      center
+      show-close
+    >
+      <el-form :model="formRoleData" label-width="80px">
+        <el-form-item v-for="(item, index) in list" :key="index" :label="item.label" :prop="item.prop">
+          <el-input v-model="formRoleData[item.prop]"></el-input>
+        </el-form-item>
+      </el-form>
+
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="handleClose">取 消</el-button>
+          <el-button type="primary" @click="handleSubmit">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
-
-  <!-- 弹窗 -->
-  <el-dialog v-model="dialogVisible" title="新建" width="30%" :before-close="handleClose">
-    <!-- 在这里放置弹窗内容 -->
-    <el-form :model="formData" label-width="80px">
-      <el-form-item label="姓名" prop="name">
-        <el-input v-model="formData.name"></el-input>
-      </el-form-item>
-      <el-form-item label="年龄" prop="age">
-        <el-input v-model="formData.age" type="number"></el-input>
-      </el-form-item>
-    </el-form>
-
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="handleClose">取 消</el-button>
-        <el-button type="primary" @click="handleSubmit">确 定</el-button>
-      </span>
-    </template>
-  </el-dialog>
 </template>
 
 <script lang="ts">
-import { PolicyParams, PolicyRecord, queryPolicyList } from '@/api/list_role'
+import { PolicyParams, PolicyRecord, addRole, queryPolicyList } from '@/api/list_role'
 import useLoading from '@/hooks/loading'
 import { Options, Pagination } from '@/types/global'
 import { ElButton, ElDialog, ElForm, ElFormItem, ElInput } from 'element-plus'
@@ -133,6 +137,17 @@ const generateFormModel = () => {
     description: '',
   }
 }
+
+interface FormItem {
+  label: string
+  prop: string
+}
+interface FormRoleData {
+  roleId: string
+  name: string
+  description: string
+}
+
 export default defineComponent({
   setup() {
     const { loading, setLoading } = useLoading(true)
@@ -148,6 +163,40 @@ export default defineComponent({
       ...basePagination,
     })
 
+    // 生成唯一ID的方法
+    function generateUniqueId(): string {
+      // 在这里实现您的唯一ID生成逻辑，可以使用时间戳、UUID等方式
+      return Math.random().toString(36).substr(2, 9) // 这里使用了简单的随机字符串
+    }
+
+    // 创建表单项列表
+    const list = [
+      { label: '角色编号', prop: 'roleId' },
+      { label: '角色名称', prop: 'name' },
+      { label: '角色描述', prop: 'description' },
+      // 添加其他表单项
+    ]
+
+    // 创建表单数据对象
+    const formRoleData = reactive<FormRoleData>({ roleId: '', name: '', description: '' })
+
+    // 为每个属性生成唯一的 ID
+    list.forEach(function (item) {
+      if (item.prop === 'roleId') {
+        formRoleData[item.prop] = generateUniqueId() // 生成唯一的 UUID
+      }
+      if (item.prop === 'name') {
+        formRoleData[item.prop] = ' ' // 其他属性初始化为空字符串
+      }
+      if (item.prop === 'description') {
+        formRoleData[item.prop] = ' ' // 其他属性初始化为空字符串
+      }
+    })
+
+    // const handleSubmit = () => {
+    //   const jsonData = JSON.stringify(formData.value)
+    //   // 将 jsonData 发送到服务器
+    // }
     const contentTypeOptions: any = computed<Options[]>(() => [
       {
         label: t('超级管理员'),
@@ -236,11 +285,23 @@ export default defineComponent({
     }
 
     const handleSubmit = () => {
-      console.log('Form submitted:', formModel.value)
+      console.log('1Form submitted:', formRoleData)
+      const jsonData = JSON.stringify(formRoleData)
+      console.log('2Form submitted:', jsonData)
+      try {
+        const data = addRole(jsonData)
+        // 请求成功后的处理
+        console.log('Data added successfully:', data)
+      } catch (error) {
+        // 请求失败后的处理
+        console.error('Failed to add role:', error)
+      }
       dialogVisible.value = false
     }
 
     return {
+      list,
+      formRoleData,
       loading,
       search,
       onPageChange,

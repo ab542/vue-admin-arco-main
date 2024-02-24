@@ -3,7 +3,7 @@ import { DataZoomComponent, GraphicComponent, GridComponent, LegendComponent, To
 import { use } from 'echarts/core'
 import { CanvasRenderer } from 'echarts/renderers'
 import ElementPlus from 'element-plus'
-import 'element-ui/lib/theme-chalk/index.css'
+import 'element-plus/theme-chalk/index.css'
 import { App } from 'vue'
 import Breadcrumb from './breadcrumb/index.vue'
 import Chart from './chart/index.vue'

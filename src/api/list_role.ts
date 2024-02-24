@@ -27,6 +27,21 @@ export function queryPolicyList(params: PolicyParams) {
   return axios.post<PolicyListRes>(`${BASE.BASE_URL}role/listPage`, params)
 }
 
+export async function addRole(params: string) {
+  try {
+    const response = await axios.post(`${BASE.BASE_URL}role`, params, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    console.log('Response:', response.data)
+    return response.data
+  } catch (error) {
+    console.error('Error adding role:', error)
+    throw error
+  }
+}
+
 export interface ServiceRecord {
   id: number
   title: string
